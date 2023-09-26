@@ -5,7 +5,7 @@ package com.study.design.order.pojo;
  * @date 2023/09/07
  * 订单状态枚举
  **/
-public enum OrderStateEnum {
+public enum OrderStateType {
 
     ORDER_STATE_WAIT_PAY,//待支付
     ORDER_STATE_WAIT_SEND,//待发货

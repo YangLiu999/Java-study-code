@@ -2,7 +2,7 @@ package com.study.design.order.config;
 
 import com.study.design.order.pojo.Order;
 import com.study.design.order.pojo.OrderStateChangeAction;
-import com.study.design.order.pojo.OrderStateEnum;
+import com.study.design.order.pojo.OrderStateType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.StateMachineContext;
@@ -24,15 +24,15 @@ import java.util.EnumSet;
  **/
 @Configuration
 @EnableStateMachine(name = "orderStateMachine")
-public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<OrderStateEnum, OrderStateChangeAction> {
+public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<OrderStateType, OrderStateChangeAction> {
     /**
      * 初始化状态
      * @param states
      * @throws Exception
      */
-    public void configure(StateMachineStateConfigurer<OrderStateEnum, OrderStateChangeAction> states) throws Exception {
-            states.withStates().initial(OrderStateEnum.ORDER_STATE_WAIT_PAY)
-                    .states(EnumSet.allOf(OrderStateEnum.class));
+    public void configure(StateMachineStateConfigurer<OrderStateType, OrderStateChangeAction> states) throws Exception {
+            states.withStates().initial(OrderStateType.ORDER_STATE_WAIT_PAY)
+                    .states(EnumSet.allOf(OrderStateType.class));
         }
 
     /**
@@ -40,17 +40,17 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
      * @param transitions
      * @throws Exception
      */
-    public void configure(StateMachineTransitionConfigurer<OrderStateEnum, OrderStateChangeAction> transitions) throws Exception {
-            transitions.withExternal().source(OrderStateEnum.ORDER_STATE_WAIT_PAY)
-                    .target(OrderStateEnum.ORDER_STATE_WAIT_SEND)
+    public void configure(StateMachineTransitionConfigurer<OrderStateType, OrderStateChangeAction> transitions) throws Exception {
+            transitions.withExternal().source(OrderStateType.ORDER_STATE_WAIT_PAY)
+                    .target(OrderStateType.ORDER_STATE_WAIT_SEND)
                     .event(OrderStateChangeAction.PAY_ORDER)
                     .and()
-                    .withExternal().source(OrderStateEnum.ORDER_STATE_WAIT_SEND)
-                    .target(OrderStateEnum.ORDER_STATE_WAIT_RECEIVE)
+                    .withExternal().source(OrderStateType.ORDER_STATE_WAIT_SEND)
+                    .target(OrderStateType.ORDER_STATE_WAIT_RECEIVE)
                     .event(OrderStateChangeAction.SEND_ORDER)
                     .and()
-                    .withExternal().source(OrderStateEnum.ORDER_STATE_WAIT_RECEIVE)
-                    .target(OrderStateEnum.ORDER_STATE_FINISH)
+                    .withExternal().source(OrderStateType.ORDER_STATE_WAIT_RECEIVE)
+                    .target(OrderStateType.ORDER_STATE_FINISH)
                     .event(OrderStateChangeAction.RECEIVE_ORDER);
         }
 

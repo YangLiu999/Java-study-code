@@ -2,7 +2,7 @@ package com.study.design.order;
 
 import com.study.design.order.pojo.Order;
 import com.study.design.order.pojo.OrderStateChangeAction;
-import com.study.design.order.pojo.OrderStateEnum;
+import com.study.design.order.pojo.OrderStateType;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.annotation.OnTransition;
 import org.springframework.statemachine.annotation.WithStateMachine;
@@ -22,21 +22,21 @@ public class OrderStateMachineListener {
     @OnTransition(source = "ORDER_STATE_WAIT_PAY",target = "ORDER_STATE_WAIT_SEND")
     public Boolean payToSend(Message<OrderStateChangeAction> message){
         Order order = (Order) message.getHeaders().get("order");
-        order.setOrderState(OrderStateEnum.ORDER_STATE_WAIT_SEND);
+        order.setOrderState(OrderStateType.ORDER_STATE_WAIT_SEND);
         return true;
     }
 
     @OnTransition(source = "ORDER_STATE_WAIT_SEND",target = "ORDER_STATE_WAIT_RECEIVE")
     public Boolean sendToReceive(Message<OrderStateChangeAction> message){
         Order order = (Order) message.getHeaders().get("order");
-        order.setOrderState(OrderStateEnum.ORDER_STATE_WAIT_RECEIVE);
+        order.setOrderState(OrderStateType.ORDER_STATE_WAIT_RECEIVE);
         return true;
     }
 
     @OnTransition(source = "ORDER_STATE_WAIT_RECEIVE",target = "ORDER_STATE_FINISH")
     public Boolean receiveToFinish(Message<OrderStateChangeAction> message){
         Order order = (Order) message.getHeaders().get("order");
-        order.setOrderState(OrderStateEnum.ORDER_STATE_FINISH);
+        order.setOrderState(OrderStateType.ORDER_STATE_FINISH);
         return true;
     }
 

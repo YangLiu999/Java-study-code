@@ -9,7 +9,7 @@ public class Order {
 
     private Integer orderId;
 
-    private OrderStateEnum orderState;
+    private OrderStateType orderState;
 
     public Integer getOrderId() {
         return orderId;
@@ -19,11 +19,11 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public OrderStateEnum getOrderState() {
+    public OrderStateType getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(OrderStateEnum orderState) {
+    public void setOrderState(OrderStateType orderState) {
         this.orderState = orderState;
     }
 }
