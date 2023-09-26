@@ -1,6 +1,6 @@
 package com.study.design.component;
 
-import com.study.design.pojo.PayBody;
+import com.study.design.pay.pojo.PayBody;
 import org.springframework.stereotype.Component;
 
 /**

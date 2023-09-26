@@ -1,6 +1,6 @@
 package com.study.design.pay.strategy;
 
-import com.study.design.pojo.PayBody;
+import com.study.design.pay.pojo.PayBody;
 
 /**
  * @author YL

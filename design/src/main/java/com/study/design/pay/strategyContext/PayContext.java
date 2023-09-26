@@ -1,7 +1,7 @@
 package com.study.design.pay.strategyContext;
 
 import com.study.design.pay.strategy.PayStrategy;
-import com.study.design.pojo.PayBody;
+import com.study.design.pay.pojo.PayBody;
 
 /**
  * @author YL

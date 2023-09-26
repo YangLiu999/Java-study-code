@@ -1,6 +1,7 @@
 package com.study.design.pay.strategyEnum;
 
 /**
+ * 策略枚举类
  * @author YL
  * @date 2023/09/25
  **/

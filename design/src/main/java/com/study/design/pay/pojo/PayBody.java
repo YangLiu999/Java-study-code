@@ -1,4 +1,4 @@
-package com.study.design.pojo;
+package com.study.design.pay.pojo;
 
 /**
  * @author YL
@@ -11,6 +11,16 @@ public class PayBody {
     private String account;
 
     private int amount;
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    private String product;
 
     public int getType() {
         return type;

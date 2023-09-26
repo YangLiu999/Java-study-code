@@ -1,10 +1,11 @@
 package com.study.design.service;
 
+import com.study.design.pay.facade.StrategyFacade;
 import com.study.design.pay.strategyContext.PayContext;
 import com.study.design.component.PayHandler;
 import com.study.design.pay.strategyEnum.StrategyEnum;
 import com.study.design.pay.strategyFactory.StrategyFactory;
-import com.study.design.pojo.PayBody;
+import com.study.design.pay.pojo.PayBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class PayServie {
     public Boolean pay(PayBody payBody) {
 
         Boolean flag = false;
-        if (payBody.getType() == 0){
+       /* if (payBody.getType() == 0){
             //zfb
             //flag = payHandler.zfbPay(payBody);
             //flag = new PayContext(new ZfbPayStrategy()).execute(payBody);
@@ -40,7 +41,9 @@ public class PayServie {
                     .execute(payBody);
         }else {
             throw new UnsupportedOperationException("unknown type");
-        }
+        }*/
+        //门面类优化修改
+        flag = StrategyFacade.pay(payBody);
         if (flag){
             saveToDb(payBody);
         }
