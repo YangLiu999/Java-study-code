@@ -1,5 +1,6 @@
 package com.lock;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Condition;
@@ -73,5 +74,9 @@ public class SelfLock implements Lock {
     }
     public boolean hasQueuedThreads(){
         return sync.hasQueuedThreads();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Random().nextInt(101));
     }
 }
