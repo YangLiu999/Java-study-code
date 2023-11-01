@@ -1,10 +1,9 @@
 package com.yangliu.rabbitMq;
 
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.*;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -31,15 +30,57 @@ public class RabbitMqTest {
         channel.queueDeclare("myQueue",true,false,false,null);
         //绑定exchange和queue
         channel.queueBind("myQueue","myExchange","myRoutingKey");
+        //Listene异步获取听消费者ack，前提开启channel confirm机制
+        channel.confirmSelect();
+        channel.addConfirmListener(new ConfirmListener() {
+            @Override
+            public void handleAck(long l, boolean b) throws IOException {
+                System.out.println("tagId:"+l);
+            }
+
+            @Override
+            public void handleNack(long l, boolean b) throws IOException {
+                System.out.println("tagId:"+l);
+            }
+        });
         //send message
         byte[] msg = "Hello World!".getBytes();
         //如果需要消息持久化，需要设置BasicProperties,将delivery_mode设置成2说明消息的持久化
-        channel.basicPublish("myExchange","myRoutingKey",false,
+        channel.basicPublish("myExchange","myRoutingKey",true,
                 new AMQP.BasicProperties().builder()
                         .deliveryMode(2)//消息持久化设置
                         .contentType("text/plain")
                         .build()
                 ,msg);
+        //设置exchange到queue没法路由的listener
+        channel.addReturnListener(new ReturnListener() {
+            @Override
+            public void handleReturn(int i, String s, String s1, String s2,
+                                     AMQP.BasicProperties basicProperties,
+                                     byte[] bytes) throws IOException {
+                System.out.println("exchange到queue路由失败："+new String(bytes));
+            }
+        });
+        channel.addReturnListener(new ReturnCallback() {
+            @SneakyThrows
+            @Override
+            public void handle(Return aReturn) {
+                System.out.println("exchange到queue路由失败："+new ObjectMapper().writeValueAsString(aReturn));
+            }
+        });
+
+        //消费者消费消息
+        channel.basicConsume("myQueue",false,"myConsumer",new DefaultConsumer(channel){
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope,
+                                       AMQP.BasicProperties properties, byte[] body) throws IOException {
+                System.out.println("接收到了消息--"+new String(body));
+                long deliveryTag = envelope.getDeliveryTag();
+                System.out.println("deliveryTag:"+ deliveryTag);
+                channel.basicAck(deliveryTag,true);
+            }
+        });
+
 
     }
 }
